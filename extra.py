@@ -197,6 +197,37 @@ if multiply2:
     print_matrix(multiply2)
 
 
+rows = int(input("Enter the number of rows of relevance matrix: "))
+cols = int(input("Enter the number of columns of relevance matrix: "))
+
+relevance_matrix = take_matrix_input(rows, cols)
+if relevance_matrix:
+    # Print the matrix
+    print("User Relevance Matrix:")
+    print_matrix(relevance_matrix)
+else:
+    print("Matrix input error. Please try again.")
+
+def add_matrices(matrix1, matrix2):
+    # Check if matrices have the same dimensions
+    if len(matrix1) != len(matrix2) or len(matrix1[0]) != len(matrix2[0]):
+        return "Matrices must have the same dimensions for addition."
+
+    # Initialize the result matrix with zeros
+    result = [[0 for _ in range(len(matrix1[0]))] for _ in range(len(matrix1))]
+
+    # Perform addition
+    for i in range(len(matrix1)):
+        for j in range(len(matrix1[0])):
+            result[i][j] = matrix1[i][j] + matrix2[i][j]
+
+    return result
+
+result_matrix = add_matrices(multiply2,relevance_matrix)
+# Print result
+for row in result_matrix:
+    print(row)
+
 
 
 
