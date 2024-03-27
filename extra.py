@@ -1,8 +1,8 @@
 import sympy as sp
 s = sp.symbols('s')
 
-def identity_matrix(n):
-    
+# identity matric function
+def identity_matrix(n):    
     result = []
     for i in range(n):
         row = []
@@ -15,9 +15,9 @@ def identity_matrix(n):
         result.append(row)
     return result
 
+m=int(input("Enter the order of the system,which should be a sqaure matrix[A]:"))
 
-m=int(input("Enter the order of the system,which should be a sqaure matrix"))
-
+# function to square matrix as input
 def take_square_matrix_input(size):
     matrix = []
     print("Enter the elements of the square matrix row-wise[A]:")
@@ -26,21 +26,17 @@ def take_square_matrix_input(size):
         matrix.append(row)
     return matrix
 
-
 matrix1 = take_square_matrix_input(m)
-
-
-print("Entered square matrix:")
+print("Entered square matrix[A]:")
 for row in matrix1:
     print(row)
-
-
 
 identity=identity_matrix(m)
 print("SI")
 for row in identity:
     print(row)
 
+# function to subtract two matrices
 def subtract_matrices(matrix1, matrix2):
     result = []
     for i in range(len(matrix1)):
@@ -53,28 +49,16 @@ def subtract_matrices(matrix1, matrix2):
 
 result_matrix = subtract_matrices(identity,matrix1 )
 
-
 print("SI-A")
 for row in result_matrix:
     print(row)
 
-
+# function to find transpose
 def transpose(matrix):
     return [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
 
-
+# function to multiply two matrices
 def matrix_multiply(A, B):
-    """
-    Multiply two matrices A and B.
-    
-    Parameters:
-        A: List of lists, first matrix
-        B: List of lists, second matrix
-    
-    Returns:
-        result: List of lists, result of matrix multiplication
-    """
-    # Get dimensions of the matrices
     rows_A = len(A)
     cols_A = len(A[0])
     rows_B = len(B)
@@ -88,7 +72,7 @@ def matrix_multiply(A, B):
     # Initialize the result matrix with zeros
     result = [[0 for _ in range(cols_B)] for _ in range(rows_A)]
     
-    # Perform matrix multiplication
+  
     for i in range(rows_A):
         for j in range(cols_B):
             for k in range(cols_A):
@@ -96,10 +80,7 @@ def matrix_multiply(A, B):
     
     return result
 
-
-
-
-
+#function to find inverse of a matrix
 def inverse_matrix(matrix):
     n = len(matrix)
     if len(matrix) != len(matrix[0]):
@@ -141,7 +122,6 @@ print("Inverse of Matrix 1:")
 if inverse1:
     print_matrix(inverse1)
 
-
 def take_matrix_input(rows, cols):
     matrix = []
     print("Enter the elements of the matrix row-wise:")
@@ -158,9 +138,9 @@ def print_matrix(matrix):
     for row in matrix:
         print(row)
 
-# Get user input for the size of the matrix
-rows = int(input("Enter the number of rows of input matrix: "))
-cols = int(input("Enter the number of columns of input matrix: "))
+# Get user input for the size of the matrix2
+row_col_input=input("Enter the number of rows and columns of input matrix sperated by space[B]:")
+rows,cols=map(int,row_col_input.split())
 
 # Take matrix input from user
 input_matrix = take_matrix_input(rows, cols)
@@ -172,8 +152,10 @@ if input_matrix:
 else:
     print("Matrix input error. Please try again.")
 
-rows = int(input("Enter the number of rows of output matrix: "))
-cols = int(input("Enter the number of columns of output matrix: "))
+
+# Get user input for the size of the matrix2
+row_col_input=input("Enter the number of rows and columns of output matrix sperated by space[C]:")
+rows,cols=map(int,row_col_input.split())
 
 # Take matrix input from user
 output_matrix = take_matrix_input(rows, cols)
@@ -185,7 +167,6 @@ if output_matrix:
 else:
     print("Matrix input error. Please try again.")
 
-
 multiply1=matrix_multiply(output_matrix, inverse1)
 if multiply1:
     print("Multiplication of output matices and inverse1")
@@ -196,9 +177,9 @@ if multiply2:
     print("Multiplication of multiply1 and input matrix")
     print_matrix(multiply2)
 
-
-rows = int(input("Enter the number of rows of relevance matrix: "))
-cols = int(input("Enter the number of columns of relevance matrix: "))
+# Get user input for the size of the matrix
+row_col_input=input("Enter the number of rows and columns of Relevance matrix sperated by space[D]:")
+rows,cols=map(int,row_col_input.split())
 
 relevance_matrix = take_matrix_input(rows, cols)
 if relevance_matrix:
@@ -208,6 +189,7 @@ if relevance_matrix:
 else:
     print("Matrix input error. Please try again.")
 
+# function to add two matrices
 def add_matrices(matrix1, matrix2):
     # Check if matrices have the same dimensions
     if len(matrix1) != len(matrix2) or len(matrix1[0]) != len(matrix2[0]):
@@ -224,11 +206,7 @@ def add_matrices(matrix1, matrix2):
     return result
 
 result_matrix = add_matrices(multiply2,relevance_matrix)
-# Print result
-for row in result_matrix:
-    print(row)
-
-
+print_matrix(result_matrix)
 
 
 
