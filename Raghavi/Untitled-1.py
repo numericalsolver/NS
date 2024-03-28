@@ -46,11 +46,4 @@ class control_systems:
         plt.plot([wc, wc], plt.ylim(), 'r--')
         plt.title(f"Crossover Frequency = {0:.3g} rad/sec".format(wc))
 
-        # Save the plot image to a BytesIO buffer
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        plt.close()  # Close the plot to free up resources
-
-        # Convert the image buffer to a base64-encoded string
-        image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        return image_data
+    plt.show()

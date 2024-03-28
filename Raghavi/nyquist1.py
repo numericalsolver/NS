@@ -18,7 +18,7 @@ plt.axvline(0, color='black',linewidth=2)
 def random_color():
     return (random.random(), random.random(), random.random())
 
-contour=ct.nyquist_plot(transfer_function,return_contour=True ,color=random_color(),arrows =2 ,arrow_size=10,start_marker='o',start_marker_size=10,linewidth=4)
+contour=ct.nyquist_plot(transfer_function,return_contour=True ,color=random_color(),arrows =2 ,arrow_size=20,start_marker='o',start_marker_size=10,linewidth=4)
 for arrow in plt.gca().findobj(patches.FancyArrowPatch):
     color ="black"
     arrow.set_color(color)
