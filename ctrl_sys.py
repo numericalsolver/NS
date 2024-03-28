@@ -14,7 +14,10 @@ class control_systems:
         # conversion of base64 is compulsory for any data
 
     def plot_bode(self):
-        print("check 2")
+        #append steps that has to be sent to front-end
+        steps=[]
+        results=[]
+
         (num, den) = control.pade(0.25, 3)
         Gp = control.tf(num, den) * self.G
 
@@ -53,4 +56,7 @@ class control_systems:
 
         # Convert the image buffer to a base64-encoded string
         image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        return image_data
+        return image_data,steps,results
+
+
+
