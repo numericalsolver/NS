@@ -1,6 +1,9 @@
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
+import control
+from sympy import Symbol, Poly, expand, lambdify, inverse_laplace_transform, collect
+
 
 def mark_specifications(c_t):
     # Define the time points for simulation
@@ -87,7 +90,6 @@ def main():
     R_s = sp.Poly(num_R, sp.Symbol('s')) / sp.Poly(den_R, sp.Symbol('s'))
 
     
-
     # Coefficients of numerator and denominator of G(s)
     num_G = list(map(float, input("Enter coefficients of numerator of G(s) separated by space: ").split()))
     den_G = list(map(float, input("Enter coefficients of denominator of G(s) separated by space: ").split()))
@@ -114,14 +116,12 @@ def main():
     c_t = sp.collect(c_t, sp.exp(-sp.Symbol('t')))
 
     # Print the result
-    print("Transfer Function R(s) =", R_s)
+    print("Laplace Transform of r(t): R(s) =", R_s)
     print("Transfer Function G(s) =", G_s)
     print("Transfer Function H(s) =", H_s)
     print("C(s) =", C_s)
     print("Inverse Laplace Transform of C(s) to get c(t):")
     print(c_t)
-
-
 
     # Call mark_specifications() to plot the response and mark specifications
     mark_specifications(c_t)
