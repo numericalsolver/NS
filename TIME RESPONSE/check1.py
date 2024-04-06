@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import control
 from sympy import Symbol, Poly, expand, lambdify, inverse_laplace_transform, collect
+from scipy.signal import TransferFunction
 
 
 def mark_specifications(c_t):
@@ -81,50 +82,64 @@ def mark_specifications(c_t):
     plt.show()
 
 
+
+
+import sympy as sp
+import numpy as np
+
+import sympy as sp
+import numpy as np
+
 def main():
     # Coefficients of numerator and denominator of R(s)
     num_R = list(map(float, input("Enter coefficients of numerator of R(s) separated by space: ").split()))
     den_R = list(map(float, input("Enter coefficients of denominator of R(s) separated by space: ").split()))
 
-    # Constructing transfer function R(s)
-    R_s = sp.Poly(num_R, sp.Symbol('s')) / sp.Poly(den_R, sp.Symbol('s'))
-
-    
     # Coefficients of numerator and denominator of G(s)
     num_G = list(map(float, input("Enter coefficients of numerator of G(s) separated by space: ").split()))
     den_G = list(map(float, input("Enter coefficients of denominator of G(s) separated by space: ").split()))
-
-    # Constructing transfer function G(s)
-    G_s = sp.Poly(num_G, sp.Symbol('s')) / sp.Poly(den_G, sp.Symbol('s'))
 
     # Coefficients of numerator and denominator of H(s)
     num_H = list(map(float, input("Enter coefficients of numerator of H(s) separated by space: ").split()))
     den_H = list(map(float, input("Enter coefficients of denominator of H(s) separated by space: ").split()))
 
-    # Constructing transfer function H(s)
+    # Construct transfer functions R(s), G(s), and H(s)
+    R_s = sp.Poly(num_R, sp.Symbol('s')) / sp.Poly(den_R, sp.Symbol('s'))
+    G_s = sp.Poly(num_G, sp.Symbol('s')) / sp.Poly(den_G, sp.Symbol('s'))
     H_s = sp.Poly(num_H, sp.Symbol('s')) / sp.Poly(den_H, sp.Symbol('s'))
 
-    # Calculating C(s)
+    # Calculate the transfer function C(s)
     C_s = G_s / (1 + G_s * H_s) * R_s
     C_s = sp.simplify(C_s)
 
-    # Calculate c(t) by inverse Laplace transform
-    c_t = sp.inverse_laplace_transform(C_s, sp.Symbol('s'), sp.Symbol('t'))
+    # Extract numerator and denominator coefficients of C(s)
+    num_C, den_C = C_s.as_numer_denom()
 
-    # Simplify and format c(t)
-    c_t = sp.simplify(c_t)
-    c_t = sp.collect(c_t, sp.exp(-sp.Symbol('t')))
+    # Calculate natural frequency and damping ratio
+    b_m = sp.degree(num_C)
+    a_n = sp.degree(den_C)
 
-    # Print the result
-  
-    print("Transfer Function R(s) =", R_s, " where r(s) is Laplace Transform of input signal r(t)")
-    print("Transfer Function G(s) =", G_s, " where G(s) is open loop transfer function")
-    print("Transfer Function H(s) =", H_s, " where H(s) is negative feedback")
-    print("Transfer Function C(s) =", C_s, "where C(s) is the Laplace transform of the output signal c(t)")
-    print("Inverse Laplace Transform of C(s) to get the output signal c(t)=", c_t)
+    if a_n == -sp.oo:
+        print("The denominator polynomial is zero. Cannot calculate natural frequency.")
+        return
+    elif a_n == 0:
+        print("The denominator polynomial is constant. Natural frequency and damping ratio are undefined.")
+        return
 
-    # Call mark_specifications() to plot the response and mark specifications
-    mark_specifications(c_t)
+    den_C_poly = den_C.as_poly()
+    omega_n = np.sqrt(den_C_poly.coeffs()[-2] / den_C_poly.coeffs()[-1])
+    damping_ratio = -den_C_poly.coeffs()[-2] / (2 * omega_n * den_C_poly.coeffs()[-1])
+
+
+    # Print the results
+    print("Degree of denominator polynomial:", a_n)
+    print("Natural Frequency:", omega_n)
+    print("Damping Ratio:", damping_ratio)
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
