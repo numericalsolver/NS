@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import control
 from sympy import Symbol, Poly, expand, lambdify, inverse_laplace_transform, collect
+import base64
+from io import BytesIO
 
 
 def mark_specifications(c_t):
@@ -115,16 +117,56 @@ def main():
     c_t = sp.simplify(c_t)
     c_t = sp.collect(c_t, sp.exp(-sp.Symbol('t')))
 
+
+
+
+   # Initialize empty lists to store steps and results
+    steps = []
+    results = []
+
+    # Step 1: Calculate Laplace Transform of the given input signal r(t) to get R(s)
+    steps.append("Generalized Transfer Function of 1st order system = C(s)/R(s) = G(s)/[1 + G(s)H(s)]",
+                 "Step 1: Calculate Laplace Transform of the given input signal r(t) to get R(s)")
+    results.append("Result for Step 1: R(s) = " + str(R_s))
+
+    # Step 2: Substitute the given G(s) i.e open loop transfer function in the above formula
+    steps.append("Step 2: Substitute the given G(s) i.e open loop transfer function in the above formula")  
+    results.append("Result for Step 2: G(s) = " + str(G_s))
+
+    # Step 3: Substitute the given H(s) i.e negative feedback in the above formula
+    steps.append("Step 3: Substitute the given H(s) i.e negative feedback in the above formula")
+    results.append("Result for Step 3: H(s) = " + str(H_s))
+
+    # Step 4: Simplify the above equation to get C(s)
+    steps.append("Step 4: Simplify the above equation to get C(s)")
+    results.append("Result for Step 4: C(s) = " + str(C_s))
+
+    # Step 5: Calculate Inverse Laplace Transform of C(s) to get the output signal c(t)
+    steps.append("Step 5: Calculate Inverse Laplace Transform of C(s) to get the output signal c(t)") 
+    results.append("Result for Step 5: Output signal c(t) = " + str(c_t))
+
     # Print the result
   
-    print("Transfer Function R(s) =", R_s, " where r(s) is Laplace Transform of input signal r(t)")
-    print("Transfer Function G(s) =", G_s, " where G(s) is open loop transfer function")
-    print("Transfer Function H(s) =", H_s, " where H(s) is negative feedback")
+    print("Transfer Function R(s) =", R_s)
+    print("Transfer Function G(s) =", G_s)
+    print("Transfer Function H(s) =", H_s)
     print("Transfer Function C(s) =", C_s, "where C(s) is the Laplace transform of the output signal c(t)")
     print("Inverse Laplace Transform of C(s) to get the output signal c(t)=", c_t)
 
     # Call mark_specifications() to plot the response and mark specifications
     mark_specifications(c_t)
+
+    # Save the plot image to a BytesIO buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    plt.close()  # Close the plot to free up resources
+
+    # Convert to a base64-encoded string
+    steps = base64.b64encode('\n'.join(steps).encode('utf-8')).decode('utf-8')
+    results = base64.b64encode('\n'.join(results).encode('utf-8')).decode('utf-8')
+    image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return image_data,steps,results
+
 
 if __name__ == "__main__":
     main()
